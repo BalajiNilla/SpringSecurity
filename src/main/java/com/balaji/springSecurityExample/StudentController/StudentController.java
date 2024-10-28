@@ -25,7 +25,7 @@ public class StudentController {
     public CsrfToken getcsrfToken(HttpServletRequest request){
         return (CsrfToken) request.getAttribute("_csrf");
         /*
-        * To make other sites access the post,put and delete mappings(making changes to server)
+        * To stop other sites access the post,put and delete mappings(making changes to server)
         * every time sending csrf token in header along with the request
         * key is "X-CSRF-TOKEN" and value will be your token
         * you will get this token after hitting this request(localhost:8080/csrf) for this application
