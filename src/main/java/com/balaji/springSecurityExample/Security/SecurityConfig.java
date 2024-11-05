@@ -22,10 +22,14 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity  // to tell spring that follow this security flow
 public class SecurityConfig {
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     @Autowired
     private MyUserDetailsService myUserDetailsService;
@@ -42,7 +46,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated())// to authenticate request coming to server
 //                .formLogin(Customizer.withDefaults()) this will call login page again and again because of statelessness
                 .httpBasic(Customizer.withDefaults()) // to make requests from the postman(testing applications)
-                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);        ;
                 //to make our application stateless, it will create a new session everytime user sends a request.
                 //all these are internally functional interfaces so we have used lambda expressions, we can also do it in imaparitive way
 
